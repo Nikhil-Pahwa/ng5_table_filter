@@ -17,14 +17,14 @@ export class BookFilterPipe implements PipeTransform {
 
     /**
      * Perform the filtering.
-     * 
+     *
      * @param {Book} book The book to compare to the filter.
      * @param {Book} filter The filter to apply.
      * @return {boolean} True if book satisfies filters, false if not.
      */
     applyFilter(book: Book, filter: Book): boolean {
         for (let field in filter) {
-            if (filter[field]) {
+            if (filter[field] && field !== '$') {
                 if (typeof filter[field] === 'string') {
                     if (book[field].toLowerCase().indexOf(filter[field].toLowerCase()) === -1) {
                         return false;
@@ -34,6 +34,19 @@ export class BookFilterPipe implements PipeTransform {
                         return false;
                     }
                 }
+            } else if (filter[field] && field === '$') {
+                for (let prop in book) {
+                    if (typeof book[prop] === 'string' && isNaN(parseInt(book[prop], 10))) {
+                        if (book[prop].toLowerCase().indexOf(filter[field].toLowerCase()) !== -1) {
+                            return true;
+                        }
+                    } else if (!isNaN(parseInt(book[prop], 10))) {
+                        if (book[prop] === parseInt(filter[field], 10)) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
             }
         }
         return true;

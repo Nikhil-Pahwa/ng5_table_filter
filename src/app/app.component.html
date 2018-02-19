@@ -1,5 +1,6 @@
 <h1>{{name}}</h1>
-
+All:
+<input type="text" name="all" [(ngModel)]="filter.$" placeholder="All">
 <form>
   <table>
     <thead>
@@ -22,11 +23,9 @@
       <tr>
         <td colspan="4">
           <label for="limit">Limit: </label>
-          <input type="number" name="limit" [(ngModel)]="limit" min="1" [attr.max]="[numberOfBooks]" step="1"
-            placeholder="Limit">
+          <input type="number" name="limit" [(ngModel)]="limit" min="1" [attr.max]="[numberOfBooks]" step="1" placeholder="Limit">
           <label for="page">Page: </label>
-          <input type="number" name="page" [(ngModel)]="page" min="1" [attr.max]="[numberOfBooks]" step="1"
-            placeholder="Page">
+          <input type="number" name="page" [(ngModel)]="page" min="1" [attr.max]="[numberOfBooks]" step="1" placeholder="Page">
         </td>
       </tr>
     </tfoot>
