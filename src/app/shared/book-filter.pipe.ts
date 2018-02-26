@@ -23,6 +23,20 @@ export class BookFilterPipe implements PipeTransform {
      * @return {boolean} True if book satisfies filters, false if not.
      */
     applyFilter(book: Book, filter: Book): boolean {
+        let result = true;
+        if (filter.$) {
+            result = false;
+            for (let prop in book) {
+                if (typeof book[prop] === 'string' || typeof book[prop] === 'number') {
+                    if (book[prop].toString().toLowerCase().indexOf(filter.$.toLowerCase()) !== -1) {
+                        result = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        //if (result) {
         for (let field in filter) {
             if (filter[field] && field !== '$') {
                 if (typeof filter[field] === 'string') {
@@ -34,21 +48,10 @@ export class BookFilterPipe implements PipeTransform {
                         return false;
                     }
                 }
-            } else if (filter[field] && field === '$') {
-                for (let prop in book) {
-                    if (typeof book[prop] === 'string' && isNaN(parseInt(book[prop], 10))) {
-                        if (book[prop].toLowerCase().indexOf(filter[field].toLowerCase()) !== -1) {
-                            return true;
-                        }
-                    } else if (!isNaN(parseInt(book[prop], 10))) {
-                        if (book[prop] === parseInt(filter[field], 10)) {
-                            return true;
-                        }
-                    }
-                }
-                return false;
             }
         }
-        return true;
+        //}
+
+        return result;
     }
 }
